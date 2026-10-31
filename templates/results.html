@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="eyebrow">ELECTION ANALYTICS</div>
+<h1>Voting Results</h1>
+
+<section class="stats">
+
+
+<div class="stat">
+    <span>Total Votes</span>
+    <strong>{{ total_votes }}</strong>
+</div>
+
+<div class="stat">
+    <span>Total Candidates</span>
+    <strong>{{ results|length }}</strong>
+</div>
+
+
+</section>
+
+<section class="panel">
+
+
+<h2>Candidate Vote Statistics</h2>
+
+<div style="width:100%; min-height:300px;">
+    <canvas id="resultChart"></canvas>
+</div>
+
+
+</section>
+
+<section class="panel">
+
+
+<h2>Detailed Results</h2>
+
+<div class="table-wrap">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Candidate</th>
+                <th>Party</th>
+                <th>Total Votes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for r in results %}
+
+            <tr>
+                <td>{{ r.name }}</td>
+                <td>{{ r.party }}</td>
+                <td>{{ r.total_votes }}</td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="3">No results available.</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const chartElement = document.getElementById("resultChart");
+
+    const candidateNames = {{ results | map(attribute='name') | list | tojson }};
+
+    const voteCounts = {{ results | map(attribute='total_votes') | list | tojson }};
+
+    if (chartElement && typeof Chart !== "undefined") {
+
+        new Chart(chartElement, {
+
+            type: "bar",
+
+            data: {
+
+                labels: candidateNames,
+
+                datasets: [{
+
+                    label: "Total Votes",
+
+                    data: voteCounts,
+
+                    backgroundColor: "#15966b",
+
+                    borderColor: "#087b58",
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+                            precision: 0
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

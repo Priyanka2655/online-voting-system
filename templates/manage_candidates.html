@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="eyebrow">ADMIN PANEL</div>
+<h1>Manage Candidates</h1>
+
+<section class="panel">
+    <h2>Add New Candidate</h2>
+
+    <form method="POST" action="{{ url_for('add_candidate') }}">
+        <label>Candidate Name</label>
+        <input type="text" name="name" placeholder="Enter candidate name" required>
+
+        <label>Party Name</label>
+        <input type="text" name="party" placeholder="Enter party name" required>
+
+        <button type="submit" class="btn">Add Candidate</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Candidate List</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Party</th>
+                    <th>Votes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for c in candidates %}
+                <tr>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.party }}</td>
+                    <td>{{ c.total_votes }}</td>
+                    <td>
+                        {% if c.total_votes == 0 %}
+                        <form method="POST"
+                              action="{{ url_for('delete_candidate', candidate_id=c.id) }}"
+                              onsubmit="return confirm('Delete this candidate?');">
+                            <button class="link-btn" type="submit">Delete</button>
+                        </form>
+                        {% else %}
+                            Not Available
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">No candidates found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="eyebrow">ADMIN PANEL</div>
+<h1>Voting Reports</h1>
+
+<section class="stats">
+
+    <div class="stat">
+        <span>Total Registered Voters</span>
+        <strong>{{ total_voters }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>Total Votes</span>
+        <strong>{{ total_votes }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>Total Candidates</span>
+        <strong>{{ results|length }}</strong>
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <h2>Download Reports</h2>
+
+    <a href="{{ url_for('download_pdf') }}" class="btn">
+        Download PDF
+    </a>
+
+    <a href="{{ url_for('download_excel') }}" class="btn">
+        Download Excel
+    </a>
+
+</section>
+
+<section class="panel">
+
+    <h2>Candidate-wise Voting Report</h2>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Party</th>
+                    <th>Total Votes</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for r in results %}
+                <tr>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.party }}</td>
+                    <td>{{ r.total_votes }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No records found.</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

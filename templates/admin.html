@@ -1,0 +1,141 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <div class="eyebrow">ADMIN PANEL</div>
+        <h1>Admin Dashboard</h1>
+        <p class="muted">Welcome, Admin! Manage your online election.</p>
+    </div>
+</div>
+
+<!-- Dashboard Statistics -->
+<div class="stats">
+
+    <div class="stat">
+        <span>👥 Total Voters</span>
+        <strong>{{ voter_count }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>🗳️ Total Candidates</span>
+        <strong>{{ candidates|length }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>📊 Total Votes</span>
+        <strong>{{ vote_count }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>🟢 Election Status</span>
+        <strong>Ongoing</strong>
+    </div>
+
+</div>
+
+<!-- Add Candidate -->
+<section class="panel">
+
+    <h2>➕ Manage Candidates</h2>
+
+    <form class="inline-form"
+          method="post"
+          action="{{ url_for('add_candidate') }}">
+
+        <input type="text"
+               name="name"
+               placeholder="Candidate Name"
+               required>
+
+        <input type="text"
+               name="party"
+               placeholder="Party Name"
+               required>
+
+        <button class="btn" type="submit">
+            Add Candidate
+        </button>
+
+    </form>
+
+</section>
+
+<!-- Voting Results -->
+<section class="panel">
+
+    <h2>📊 Voting Results</h2>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Candidate Name</th>
+                    <th>Party Name</th>
+                    <th>Total Votes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for c in candidates %}
+
+                <tr>
+
+                    <td>{{ c.id }}</td>
+
+                    <td>{{ c.name }}</td>
+
+                    <td>{{ c.party }}</td>
+
+                    <td>
+                        <strong>{{ c.total_votes }}</strong>
+                    </td>
+
+                    <td>
+
+                        {% if c.total_votes == 0 %}
+
+                        <form method="post"
+                              action="{{ url_for('delete_candidate', candidate_id=c.id) }}"
+                              onsubmit="return confirm('Delete this candidate?');">
+
+                            <button class="link-btn" type="submit">
+                                Delete
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        Cannot Delete
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="5">No candidates available.</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

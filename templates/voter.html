@@ -1,0 +1,138 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<!-- PAGE HEADER -->
+
+<div class="page-head">
+    <div>
+        <div class="eyebrow">VOTER PANEL</div>
+        <h1>Welcome, {{ session.get('name') }}!</h1>
+        <p class="muted">
+            Your vote matters. Be a part of the change.
+        </p>
+    </div>
+</div>
+
+
+<!-- DASHBOARD STATISTICS -->
+
+<div class="stats">
+
+    <div class="stat">
+        <span>👥 Total Candidates</span>
+        <strong>{{ candidates|length }}</strong>
+    </div>
+
+    <div class="stat">
+        <span>🗳️ Voting Status</span>
+
+        {% if voted %}
+            <strong>Completed</strong>
+        {% else %}
+            <strong>Not Voted</strong>
+        {% endif %}
+
+    </div>
+
+    <div class="stat">
+        <span>🔒 Election Security</span>
+        <strong>Secure</strong>
+    </div>
+
+    <div class="stat">
+        <span>✅ Account Status</span>
+        <strong>Active</strong>
+    </div>
+
+</div>
+
+
+<!-- VOTING SECTION -->
+
+<section class="panel">
+
+    <h2>🗳️ Select Your Candidate</h2>
+
+    {% if voted %}
+
+        <div class="notice">
+            <h3>✅ You have already voted!</h3>
+
+            <p>
+                Your vote has been recorded successfully.
+                Thank you for participating in the election.
+            </p>
+        </div>
+
+    {% else %}
+
+        <p class="muted">
+            Review all candidates and select your preferred candidate.
+        </p>
+
+        <div class="candidate-grid">
+
+            {% for c in candidates %}
+
+            <article class="candidate">
+
+                <div class="avatar">
+                    {{ c.name[0] }}
+                </div>
+
+                <h3>{{ c.name }}</h3>
+
+                <p>{{ c.party }}</p>
+
+                <form method="post"
+                      action="{{ url_for('vote', candidate_id=c.id) }}"
+                      onsubmit="return confirm('Are you sure you want to vote for {{ c.name }}? You cannot change your vote later.');">
+
+                    <button class="btn full" type="submit">
+                        Select Candidate
+                    </button>
+
+                </form>
+
+            </article>
+
+            {% else %}
+
+                <p>No candidates have been added yet.</p>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- INFORMATION -->
+
+<section class="panel">
+
+    <h2>📌 Important Instructions</h2>
+
+    <p class="muted">
+        1. Each voter can cast only one vote.
+    </p>
+
+    <p class="muted">
+        2. Carefully select your preferred candidate.
+    </p>
+
+    <p class="muted">
+        3. Once submitted, your vote cannot be changed.
+    </p>
+
+    <p class="muted">
+        4. Your voting information is stored securely.
+    </p>
+
+</section>
+
+{% endblock %}
+

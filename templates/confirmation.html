@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="panel narrow center">
+    <div class="eyebrow">VOTE CONFIRMATION</div>
+    <h1>✓ Vote Submitted!</h1>
+
+    {% if vote %}
+        <p>Your vote has been successfully recorded.</p>
+        <h2>{{ vote.name }}</h2>
+        <p>{{ vote.party }}</p>
+    {% endif %}
+
+    <div class="notice">
+        Thank you for participating in the election.
+    </div>
+
+    <a href="{{ url_for('my_vote') }}" class="btn">
+        View My Vote
+    </a>
+
+    <a href="{{ url_for('voter_dashboard') }}" class="btn secondary">
+        Dashboard
+    </a>
+</section>
+
+{% endblock %}

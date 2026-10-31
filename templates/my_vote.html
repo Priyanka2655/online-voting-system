@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="panel narrow">
+    <div class="eyebrow">MY VOTE</div>
+    <h1>My Voting Details</h1>
+
+    {% if vote %}
+        <div class="candidate">
+            <h2>{{ vote.name }}</h2>
+            <p>{{ vote.party }}</p>
+            <span class="notice">Vote Successfully Recorded</span>
+        </div>
+    {% else %}
+        <div class="notice">
+            You have not voted yet.
+        </div>
+
+        <a href="{{ url_for('voter_dashboard') }}" class="btn">
+            Vote Now
+        </a>
+    {% endif %}
+</section>
+
+{% endblock %}
